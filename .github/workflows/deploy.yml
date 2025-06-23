@@ -14,16 +14,15 @@ jobs:
       - name: 📥 Checkout code
         uses: actions/checkout@v3
 
-      - name: 🔑 Set up Google Cloud authentication
+      - name: 🔐 Authenticate with GCP
         uses: google-github-actions/auth@v2
         with:
           credentials_json: ${{ secrets.GCP_SA_KEY }}
 
-      - name: 🛠️ Set up Google Cloud CLI
+      - name: 🛠️ Set up gcloud CLI
         uses: google-github-actions/setup-gcloud@v2
         with:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
-          export_default_credentials: true
 
-      - name: 📦 Deploy to App Engine
+      - name: 🚀 Deploy to App Engine
         run: gcloud app deploy --quiet
