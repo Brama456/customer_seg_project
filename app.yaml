@@ -1,27 +1,11 @@
-<<<<<<< HEAD
 runtime: custom
 env: flex
-entrypoint: streamlit run streamlit_app.py --server.port=8080 --server.address=0.0.0.0 --server.enableCORS=false
+entrypoint: streamlit run streamlit_app.py --server.port=8080 --server.address=0.0.0.0
 
-automatic_scaling:
-  min_num_instances: 1
-  max_num_instances: 2
+manual_scaling:
+  instances: 1
 
 resources:
   cpu: 1
   memory_gb: 2
   disk_size_gb: 10
-=======
-runtime: custom
-env: flex
-entrypoint: streamlit run streamlit_app.py --server.port=8080 --server.address=0.0.0.0 --server.enableCORS=false
-
-automatic_scaling:
-  min_num_instances: 1
-  max_num_instances: 2
-
-resources:
-  cpu: 1
-  memory_gb: 2
-  disk_size_gb: 10
->>>>>>> df4c3b3 (🔁 Reupload: full project with updated Docker and app config)

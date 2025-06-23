@@ -5,14 +5,12 @@ from sklearn.preprocessing import StandardScaler, LabelEncoder
 from sklearn.cluster import KMeans
 import os
 
-# Set page config
+# Page config
 st.set_page_config(page_title="Banking Customer Segmentation", layout="wide")
 st.title("📊 Banking Customer Segmentation")
 
-# Try to load local file (during dev) or from uploaded file (in cloud)
-DEFAULT_PATH = "customer_segmentation_banking.xlsx"
-
-# Check if file exists locally (used in dev mode)
+# Load data
+DEFAULT_PATH = r"C:\Users\Bramarambika\Downloads\Workoopolis\Customer_segmentation\customer_segmentation_banking.xlsx"
 if os.path.exists(DEFAULT_PATH):
     df = pd.read_excel(DEFAULT_PATH)
 else:
@@ -23,7 +21,6 @@ else:
     else:
         st.stop()
 
-# Process
 st.success("✅ Data loaded successfully")
 
 # Encode categorical variables
@@ -32,12 +29,16 @@ for col in ['gender', 'marital_status', 'account_type']:
     le = LabelEncoder()
     df[col] = le.fit_transform(df[col])
 
-# Feature selection
+# Add age group as a feature
+df['age_group'] = pd.cut(df['age'], bins=[0, 35, 55, 100], labels=['Young', 'Mid', 'Senior'])
+df['age_group'] = LabelEncoder().fit_transform(df['age_group'].astype(str))
+
+# Features used for clustering
 features = [
     'age', 'income', 'recency', 'monetary',
     'digital_channel_usage_score', 'total_transactions',
     'average_transaction_value', 'loan_products', 'investment_products',
-    'gender', 'marital_status', 'account_type'
+    'gender', 'marital_status', 'account_type', 'age_group'
 ]
 
 # Clean and scale
@@ -46,19 +47,19 @@ df = df.loc[X.index]
 scaler = StandardScaler()
 X_scaled = scaler.fit_transform(X)
 
-# KMeans clustering
+# Clustering with KMeans
 kmeans = KMeans(n_clusters=3, n_init=10, max_iter=300, random_state=42)
 df['cluster'] = kmeans.fit_predict(X_scaled)
 
-# Output: segmented data
+# Segmented data output
 st.subheader("📌 Segmentation Results")
 st.dataframe(df)
 
-# Download
+# Download segmented data
 csv = df.to_csv(index=False).encode("utf-8")
 st.download_button("⬇️ Download Segmented Data", csv, "segmented_customers.csv", "text/csv")
 
-# Cluster profiling
+# Cluster profiling summary
 st.subheader("📊 Cluster Profiling")
 profile = df.groupby("cluster").agg({
     "age": "mean",
