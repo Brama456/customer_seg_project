@@ -1,6 +1,6 @@
 runtime: custom
 env: flex
-entrypoint: streamlit run streamlit_app.py --server.port=8080 --server.address=0.0.0.0
+entrypoint: streamlit run streamlit_app.py --server.port=8080 --server.address=0.0.0.0 --server.enableCORS=false
 
 manual_scaling:
   instances: 1
